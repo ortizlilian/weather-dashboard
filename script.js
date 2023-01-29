@@ -1,7 +1,8 @@
 function buttonsCity(city) {
-    $('#history').append(
-        $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
-
+    if (city != '') {
+        $('#history').append(
+            $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
+    }
 }
 
 $("#search-button").on("click", function(event) {
@@ -9,7 +10,6 @@ $("#search-button").on("click", function(event) {
 
     let city = $('#search-input').val();
     buttonsCity(city);
-    console.log(city);
 
     let queryGeoURL = "http://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=5&appid=3b515d44aff736d8b6cbd98468bd1dfb";
 

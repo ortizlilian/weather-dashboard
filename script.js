@@ -1,7 +1,10 @@
+const buttonsName = [];
+
 function buttonsCity(city) {
-    if (city != '') {
+    if (city != '' && buttonsName.includes(city) != true) {
         $('#history').append(
             $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
+        buttonsName.push(city);
     }
 }
 
@@ -145,7 +148,7 @@ $("#search-button").on("click", function(event) {
                 method: "GET"
             })
             .then(function(response) {
-            console.log(response);                
+
                 // Populate today div
                 $('#today').empty();
                 let currentDay = moment(response.list[0].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
@@ -162,7 +165,7 @@ $("#search-button").on("click", function(event) {
                 $('#today').append(currentWeather);
 
                 // Populate forecast div
-                $('#forecast').empty;                
+                $('#forecast').empty();                
                 let currentHour = moment().format("H");
                 
                 let day1 = moment(response.list[1].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
@@ -226,6 +229,9 @@ $("#search-button").on("click", function(event) {
 // 51.5073219
 // lon = response[0].lon
 // -0.1276474
+
+// Api call that returns current weather
+// let queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid=3b515d44aff736d8b6cbd98468bd1dfb"
 
 // Response from 5 day forecast
 

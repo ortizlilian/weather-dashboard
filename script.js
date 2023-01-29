@@ -5,6 +5,17 @@ function buttonsCity(city) {
     }
 }
 
+function forecastDiv (day, image, temp, wind, humidity) {
+    let weather = $(`<div class="col forecast-tiles">
+                        <h3>${day}</h3>
+                        <p>${image}</p>
+                        <p>Temp: ${temp} C</p>
+                        <p>Wind: ${wind} KPH</p>
+                        <p>Humidity: ${humidity}</p>
+                    </div>`);
+    $('#forecast').append(weather);
+}
+
 $("#search-button").on("click", function(event) {
     event.preventDefault();
 
@@ -29,10 +40,10 @@ $("#search-button").on("click", function(event) {
                 method: "GET"
             })
             .then(function(response) {
-                console.log(response);
+                const forecastObject = response;
+                
+                // Populate today div
                 $('#today').empty();
-
-                // let weatherCity = response.city.name;
                 let currentDay = moment(response.list[0].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
                 let currentTemp = response.list[0].main.temp;
                 let currentWind = response.list[0].wind.speed;
@@ -45,6 +56,26 @@ $("#search-button").on("click", function(event) {
                                             <p>Humidity: ${currentHumidity}</p>
                                         </div>`);
                 $('#today').append(currentWeather);
+
+                // Populate forecast div
+                $('#forecast').empty
+
+                let day1 = moment(response.list[1].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
+                let image1 = response.list[1].weather[0].description;
+                let temp1 = response.list[1].main.temp;
+                let wind1 = response.list[1].wind.speed;
+                let humidity1 = response.list[1].main.humidity;
+
+                forecastDiv(day1, image1, temp1, wind1, humidity1);
+
+                // let weather1 = $(`<div class="col forecast-tiles">
+                //                     <h3>${day1}</h3>
+                //                     <p>${image1}</p>
+                //                     <p>Temp: ${temp1} C</p>
+                //                     <p>Wind: ${wind1} KPH</p>
+                //                     <p>Humidity: ${humidity1}</p>
+                //                 </div>`);
+                // $('#forecast').append(weather1);
             });
         });
 });

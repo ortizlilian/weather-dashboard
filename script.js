@@ -132,37 +132,41 @@ $("#search-button").on("click", function(event) {
 
     let queryGeoURL = "http://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=5&appid=3b515d44aff736d8b6cbd98468bd1dfb";
 
+    $.ajax({
+        url: queryGeoURL,
+        method: "GET"
+    })
+    .then(function(response) {
+        let lat = response[0].lat;            
+        let lon = response[0].lon;
+        let queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
+        let queryWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
+
         $.ajax({
-            url: queryGeoURL,
+            url: queryCurrentURL,
             method: "GET"
         })
         .then(function(response) {
-            console.log(response);
-
-            let lat = response[0].lat;            
-            let lon = response[0].lon;
-            let queryWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
-
+            // Populate today div
+            $('#today').empty();
+            let currentDay = moment().format("DD/M/YYYY");
+            let currentTemp = response.main.temp;
+            let currentWind = response.wind.speed;
+            let currentHumidity = response.main.humidity;
+            
+            let currentWeather = $(`<div>
+                                        <h2>${city} (${currentDay})</h2>
+                                        <p>Temp: ${currentTemp} C</p>
+                                        <p>Wind: ${currentWind} KPH</p>
+                                        <p>Humidity: ${currentHumidity}</p>
+                                    </div>`);
+            $('#today').append(currentWeather);
+            
             $.ajax({
                 url: queryWeatherURL,
                 method: "GET"
             })
             .then(function(response) {
-
-                // Populate today div
-                $('#today').empty();
-                let currentDay = moment(response.list[0].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
-                let currentTemp = response.list[0].main.temp;
-                let currentWind = response.list[0].wind.speed;
-                let currentHumidity = response.list[0].main.humidity;
-                
-                let currentWeather = $(`<div>
-                                            <h2>${city} (${currentDay})</h2>
-                                            <p>Temp: ${currentTemp} C</p>
-                                            <p>Wind: ${currentWind} KPH</p>
-                                            <p>Humidity: ${currentHumidity}</p>
-                                        </div>`);
-                $('#today').append(currentWeather);
 
                 // Populate forecast div
                 $('#forecast').empty();                
@@ -210,17 +214,16 @@ $("#search-button").on("click", function(event) {
 
                 let day5 = moment(response.list[33].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
                 let i5 = getIndexDay5(currentHour);
-                console.log(i5)
 
                 let image5 = response.list[i5].weather[0].description;
                 let temp5 = response.list[i5].main.temp;
                 let wind5 = response.list[i5].wind.speed;
                 let humidity5 = response.list[i5].main.humidity;
-                console.log(day5, image5, temp5, wind5, humidity5);
 
                 forecastDiv(day5, image5, temp5, wind5, humidity5);                
             });
         });
+    });
 });
 
 

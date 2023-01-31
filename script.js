@@ -1,6 +1,10 @@
 
+// Variable that stores cities inputs;
 let jsonButtonsName = [];
 
+// Function that creates buttons using city names stored in an array, and attachs
+// an on.click event that injects the button value to search-input and trigger
+// a click on search-button
 function createButtons (array) {
     $('#history').empty();
 
@@ -18,11 +22,15 @@ function createButtons (array) {
     });
 }
 
+// Function that gets the cities from local storage and calls the createButtons
+// function
 function start () {
     jsonButtonsName = JSON.parse(localStorage.getItem('jsonButtonsName')) || [];
     createButtons(jsonButtonsName);
 }
 
+// Function that checks if jsonButtonsName already contains a city, if not it pushs
+// the new city to it and save the updated array to local storage
 function buttonsCity (city) {
     if (city != '' && jsonButtonsName.includes(city) != true) {        
         jsonButtonsName.push(city); 
@@ -31,6 +39,7 @@ function buttonsCity (city) {
     }
 }
 
+// Function that creates a div with the forecast data
 function forecastDiv (day, image, temp, wind, humidity) {
     let weather = $(`<div class="col forecast-tiles">
                         <h3>${day}</h3>
@@ -43,6 +52,8 @@ function forecastDiv (day, image, temp, wind, humidity) {
 }
 
 
+// The following 5 functions change the indexes of the array returned from openweather
+// according to the current time of the day. The forecast are updated every 3 hours
 function getIndexDay1 (currentHour) {
     let index = 0
     if (currentHour >= 0 && currentHour <= 2) {
@@ -149,6 +160,7 @@ function getIndexDay5 (currentHour) {
 }
 
 
+// Main on click event that triggers the api calls
 $("#search-button").on("click", function(event) {
     event.preventDefault();
 
@@ -157,6 +169,8 @@ $("#search-button").on("click", function(event) {
 
     let queryGeoURL = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=5&appid=3b515d44aff736d8b6cbd98468bd1dfb";
 
+    // First api call, used to get data to trigger second api call (the one that
+    // returns the actual weather data)
     $.ajax({
         url: queryGeoURL,
         method: "GET"
@@ -164,16 +178,21 @@ $("#search-button").on("click", function(event) {
     .then(function(response) {
         let lat = response[0].lat;            
         let lon = response[0].lon;
+
+        // Api endpoint that returns current weather
         let queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
+
+        // Api endpoint that returns 5 days forecast 
         let queryWeatherURL = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
 
+        // Ajax api call that returns current weather data
         $.ajax({
             url: queryCurrentURL,
             method: "GET"
         })
         .then(function(response) {
             
-            // Populate today div
+            // Populate today's div
             $('#today').empty();
             let currentDay = moment().format("DD/M/YYYY");
             let currentTemp = response.main.temp;
@@ -188,17 +207,18 @@ $("#search-button").on("click", function(event) {
                                     </div>`);
             $('#today').append(currentWeather);
             
+            // Ajax api call that returns 5 days forecast data
             $.ajax({
                 url: queryWeatherURL,
                 method: "GET"
             })
             .then(function(response) {
 
-                // Populate forecast div
-                console.log(response);
+                // Populate forecast's div                
                 $('#forecast').empty();                
                 let currentHour = moment().format("H");
                 
+                // Forecast data for first day 
                 let day1 = moment(response.list[1].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
                 let i1 = getIndexDay1(currentHour);
 
@@ -208,7 +228,8 @@ $("#search-button").on("click", function(event) {
                 let humidity1 = response.list[i1].main.humidity;
 
                 forecastDiv(day1, image1, temp1, wind1, humidity1);
-
+                
+                // Forecast data for second day
                 let day2 = moment(response.list[9].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
                 let i2 = getIndexDay2(currentHour);
 
@@ -219,6 +240,7 @@ $("#search-button").on("click", function(event) {
 
                 forecastDiv(day2, image2, temp2, wind2, humidity2);
 
+                // Forecast data for third day
                 let day3 = moment(response.list[17].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
                 let i3 = getIndexDay3(currentHour);
 
@@ -229,6 +251,7 @@ $("#search-button").on("click", function(event) {
 
                 forecastDiv(day3, image3, temp3, wind3, humidity3);
 
+                // Forecast data for fourth day
                 let day4 = moment(response.list[25].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
                 let i4 = getIndexDay4(currentHour);
 
@@ -239,6 +262,7 @@ $("#search-button").on("click", function(event) {
 
                 forecastDiv(day4, image4, temp4, wind4, humidity4);
 
+                // Forecast data for fifth day
                 let day5 = moment(response.list[33].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
                 let i5 = getIndexDay5(currentHour);
 
@@ -253,4 +277,5 @@ $("#search-button").on("click", function(event) {
     });
 });
 
+// Function call to get data for local storage and load it to the page
 start();

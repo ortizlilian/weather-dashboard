@@ -1,31 +1,37 @@
 // const buttonsName = [];
-let jsonButtonsName = JSON.parse(localStorage.getItem('jsonButtonsName')) || [];
+let jsonButtonsName = [];
+
+function createButtons (array) {
+    array.forEach(element => {
+        $('#history').append(
+            $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${element}</button>`));
+    });
+}
+
+function start () {
+    jsonButtonsName = JSON.parse(localStorage.getItem('jsonButtonsName')) || [];
+    createButtons(jsonButtonsName);
+}
 
 // const localButtons = JSON.parse(localStorage.getItem('array'));
 
-// function createButtons (array) {
-//     array.forEach(element => {
-//         $('#history').append(
-//             $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${element}</button>`));
-//     });
-// }
-
 function buttonsCity (city) {
     if (city != '' 
-    // && jsonButtonsName.includes(jsonButtonsName.city) != true
+    // && jsonButtonsName.includes(jsonButtonsName.name) != true
     ) {
-        let button = $('#history').append(
-            $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
+        // let button = 
+        // $('#history').append(
+        //     $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
 
-        let newButton = {
-            name: city,
-            htmlButton: button 
-        };
+        // let newButton = {
+        //     name: city,
+        //     htmlButton: button 
+        // };
 
         // buttonsName.push(city);
         // let buttonObject = localStorage.setItem(city, button);
 
-        jsonButtonsName.push(newButton); 
+        jsonButtonsName.push(city); 
         localStorage.setItem('jsonButtonsName', JSON.stringify(jsonButtonsName));
     }
 }
@@ -252,6 +258,8 @@ $("#search-button").on("click", function(event) {
         });
     });
 });
+
+start();
 
 // let localButtons = localStorage.setItem('array', JSON.stringify(buttonsName));
 

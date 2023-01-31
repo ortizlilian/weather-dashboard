@@ -1,11 +1,20 @@
-// const buttonsName = [];
+
 let jsonButtonsName = [];
 
 function createButtons (array) {
     $('#history').empty();
+
     array.forEach(element => {
         $('#history').append(
             $(`<button type="button" class="cities btn btn-secondary btn-lg btn-block">${element}</button>`));
+    });
+
+    $("button.cities").on("click", function(event) {
+        event.preventDefault();
+        let click = $(this)[0].innerText;
+        $('#search-input').val(click);
+        $('#search-button').trigger("click");
+        $('#search-input').val('');
     });
 }
 
@@ -14,12 +23,8 @@ function start () {
     createButtons(jsonButtonsName);
 }
 
-// const localButtons = JSON.parse(localStorage.getItem('array'));
-
 function buttonsCity (city) {
-    if (city != '' 
-    && jsonButtonsName.includes(city) != true
-    ) {        
+    if (city != '' && jsonButtonsName.includes(city) != true) {        
         jsonButtonsName.push(city); 
         localStorage.setItem('jsonButtonsName', JSON.stringify(jsonButtonsName));
         createButtons(jsonButtonsName);
@@ -36,6 +41,7 @@ function forecastDiv (day, image, temp, wind, humidity) {
                     </div>`);
     $('#forecast').append(weather);
 }
+
 
 function getIndexDay1 (currentHour) {
     let index = 0
@@ -142,16 +148,12 @@ function getIndexDay5 (currentHour) {
     } return index;
 }
 
-$
 
 $("#search-button").on("click", function(event) {
     event.preventDefault();
 
     let city = $('#search-input').val();
-    buttonsCity(city);
-    // createButtons(buttonsName);
-    console.log(jsonButtonsName);
-    
+    buttonsCity(city);   
 
     let queryGeoURL = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=5&appid=3b515d44aff736d8b6cbd98468bd1dfb";
 
@@ -252,62 +254,3 @@ $("#search-button").on("click", function(event) {
 });
 
 start();
-
-// let localButtons = localStorage.setItem('array', JSON.stringify(buttonsName));
-
-// createButtons(localButtons);
-
-
-// Response from city api call
-// lat = response[0].lat
-// 51.5073219
-// lon = response[0].lon
-// -0.1276474
-
-// Api call that returns current weather
-// let queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid=3b515d44aff736d8b6cbd98468bd1dfb"
-
-// Response from 5 day forecast
-
-// City = reponse.city.name
-// Current day = moment(response.list[0].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
-// Temp = response.list[0].main.temp
-// Wind = response.list[0].wind.speed
-// Humidity = response.list[0].main.humidity
-
-// Forecast 5 days
-
-// Forecast Day 1
-// day = moment(response.list[1(2, 3, 4, 5, 6, 7, 8)].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
-// image = response.list[1(2, 3, 4, 5, 6, 7, 8)].weather[0].description
-// Temp = response.list[1(2, 3, 4, 5, 6, 7, 8)].main.temp
-// Wind = response.list[1(2, 3, 4, 5, 6, 7, 8)].wind.speed
-// Humidity = response.list[1(2, 3, 4, 5, 6, 7, 8)].main.humidity
-
-// Forecast Day 2
-// day = moment(response.list[9(10, 11, 12, 13, 14, 15, 16)].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
-// image = response.list[9(10, 11, 12, 13, 14, 15, 16)].weather[0].description
-// Temp = response.list[9(10, 11, 12, 13, 14, 15, 16)].main.temp
-// Wind = response.list[9(10, 11, 12, 13, 14, 15, 16)].wind.speed
-// Humidity = response.list[9(10, 11, 12, 13, 14, 15, 16)].main.humidity
-
-// Forecast Day 3
-// day = moment(response.list[17(18, 19, 20, 21, 22, 23, 24)].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
-// image = response.list[17(18, 19, 20, 21, 22, 23, 24)].weather[0].description
-// Temp = response.list[17(18, 19, 20, 21, 22, 23, 24)].main.temp
-// Wind = response.list[17(18, 19, 20, 21, 22, 23, 24)].wind.speed
-// Humidity = response.list[17(18, 19, 20, 21, 22, 23, 24)].main.humidity
-
-// Forecast Day 4
-// day = moment(response.list[25(26, 27, 28, 29, 30, 31, 32)].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
-// image = response.list[25(26, 27, 28, 29, 30, 31, 32)].weather[0].description
-// Temp = response.list[25(26, 27, 28, 29, 30, 31, 32)].main.temp
-// Wind = response.list[25(26, 27, 28, 29, 30, 31, 32)].wind.speed
-// Humidity = response.list[25(26, 27, 28, 29, 30, 31, 32)].main.humidity
-
-// Forecast Day 5
-// day = moment(response.list[33(34, 35, 36, 37, 38, 39, 40)].dt_txt, "YYYY-MM-DD HH:mm:ss").format("DD/M/YYYY");
-// image = response.list[33(34, 35, 36, 37, 38, 39, 40)].weather[0].description
-// Temp = response.list[33(34, 35, 36, 37, 38, 39, 40)].main.temp
-// Wind = response.list[33(34, 35, 36, 37, 38, 39, 40)].wind.speed
-// Humidity = response.list[33(34, 35, 36, 37, 38, 39, 40)].main.humidity

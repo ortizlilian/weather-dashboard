@@ -1,20 +1,21 @@
-const buttonsName = [];
+// const buttonsName = [];
+let jsonButtonsName = [];
 
 // const localButtons = JSON.parse(localStorage.getItem('array'));
 
-function createButtons (array) {
-    array.forEach(element => {
-        $('#history').append(
-            $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${element}</button>`));
-    });
-}
+// function createButtons (array) {
+//     array.forEach(element => {
+//         $('#history').append(
+//             $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${element}</button>`));
+//     });
+// }
 
 function buttonsCity (city) {
-    if (city != '' && buttonsName.includes(city) != true) {
-        // let button = $('#history').append(
-        //     $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
-        buttonsName.push(city);
-        // let jsonButtonsName = JSON.stringify(buttonsName);
+    if (city != '' && jsonButtonsName.includes(jsonButtonsName.city) != true) {
+        let button = $('#history').append(
+            $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
+        // buttonsName.push(city);
+        jsonButtonsName = JSON.stringify(localStorage.setItem(city, button));
         // localStorage.setItem('array', jsonButtonsName);
     }
 }
@@ -140,7 +141,7 @@ $("#search-button").on("click", function(event) {
 
     let city = $('#search-input').val();
     buttonsCity(city);
-    createButtons(buttonsName);
+    // createButtons(buttonsName);
     
 
     let queryGeoURL = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=5&appid=3b515d44aff736d8b6cbd98468bd1dfb";

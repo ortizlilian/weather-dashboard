@@ -2,9 +2,10 @@
 let jsonButtonsName = [];
 
 function createButtons (array) {
+    $('#history').empty();
     array.forEach(element => {
         $('#history').append(
-            $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${element}</button>`));
+            $(`<button type="button" class="cities btn btn-secondary btn-lg btn-block">${element}</button>`));
     });
 }
 
@@ -17,22 +18,11 @@ function start () {
 
 function buttonsCity (city) {
     if (city != '' 
-    // && jsonButtonsName.includes(jsonButtonsName.name) != true
-    ) {
-        // let button = 
-        // $('#history').append(
-        //     $(`<button type="button" class="btn btn-secondary btn-lg btn-block">${city}</button>`));
-
-        // let newButton = {
-        //     name: city,
-        //     htmlButton: button 
-        // };
-
-        // buttonsName.push(city);
-        // let buttonObject = localStorage.setItem(city, button);
-
+    && jsonButtonsName.includes(city) != true
+    ) {        
         jsonButtonsName.push(city); 
         localStorage.setItem('jsonButtonsName', JSON.stringify(jsonButtonsName));
+        createButtons(jsonButtonsName);
     }
 }
 
@@ -151,6 +141,8 @@ function getIndexDay5 (currentHour) {
         index = 39;
     } return index;
 }
+
+$
 
 $("#search-button").on("click", function(event) {
     event.preventDefault();

@@ -2,7 +2,8 @@
 
 ## Description
 
-This app functions as a (...)
+This app functions as a weather dashboard. The code queries OpenWeather apis and returns the current weather, as well as a five day forecast for the city searched by the user.
+The app also stores the cities in local storage, so the user don't need to write the city on the search input every time he wants to check its weather.
 
 ## Deployment
 
@@ -13,6 +14,14 @@ The app was deployed using Github Pages and can be accessed [here](https://ortiz
 When the app is loaded on the browser it looks like this:
 
 ![Main Page](./assets/img/app.png)
+
+This is what shows when the user searchs a city weather:
+
+![Search](./assets/img/weather.png)
+
+Here the data saved to local storage:
+
+![Local Storage](./assets/img/localstorage.png)
 
 ## Acceptance Criteria
 

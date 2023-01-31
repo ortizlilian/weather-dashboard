@@ -143,7 +143,7 @@ $("#search-button").on("click", function(event) {
     createButtons(buttonsName);
     
 
-    let queryGeoURL = "http://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=5&appid=3b515d44aff736d8b6cbd98468bd1dfb";
+    let queryGeoURL = "https://api.openweathermap.org/geo/1.0/direct?q="+city+"&limit=5&appid=3b515d44aff736d8b6cbd98468bd1dfb";
 
     $.ajax({
         url: queryGeoURL,
@@ -153,13 +153,14 @@ $("#search-button").on("click", function(event) {
         let lat = response[0].lat;            
         let lon = response[0].lon;
         let queryCurrentURL = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
-        let queryWeatherURL = "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
+        let queryWeatherURL = "https://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&units=metric&appid=3b515d44aff736d8b6cbd98468bd1dfb";
 
         $.ajax({
             url: queryCurrentURL,
             method: "GET"
         })
         .then(function(response) {
+            
             // Populate today div
             $('#today').empty();
             let currentDay = moment().format("DD/M/YYYY");
